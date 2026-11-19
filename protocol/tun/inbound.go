@@ -527,6 +527,15 @@ func (t *Inbound) InterfaceUpdated(ctx context.Context) {
 	}
 }
 
+func (t *Inbound) Close() error {
+	t.fixGvisorClose()
+	return common.Close(
+		t.tunStack,
+		t.tunIf,
+		t.autoRedirect,
+	)
+}
+
 func (t *Inbound) FlushSystemDNSCache() {
 	linuxTUN, isLinuxTUN := t.tunIf.(tun.LinuxTUN)
 	if !isLinuxTUN {
